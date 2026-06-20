@@ -43,6 +43,31 @@ Then open:
 2. Put it in `.env` as `GEMINI_API_KEY=...`.
 3. The backend uses `gemini-1.5-flash` in `backend/app/gemini_client.py`.
 
+## Sentry and bogus request forwarding
+
+The backend can report crashes to Sentry and emit sanitized `bogus_backend_request` events for failed backend requests.
+
+Add these values to `.env` as needed:
+
+```bash
+SENTRY_DSN=
+SENTRY_ENVIRONMENT=local
+SENTRY_RELEASE=
+SENTRY_TRACES_SAMPLE_RATE=0.0
+SENTRY_SEND_DEFAULT_PII=false
+
+# Sends warning-level Sentry events for responses at or above this status.
+BOGUS_REQUEST_SENTRY_ENABLED=true
+BOGUS_REQUEST_MIN_STATUS_CODE=400
+
+# Optional: POST the same sanitized event to another app.
+BOGUS_REQUEST_WEBHOOK_URL=
+BOGUS_REQUEST_WEBHOOK_TOKEN=
+BOGUS_REQUEST_WEBHOOK_TIMEOUT_SECONDS=3
+```
+
+Webhook payloads include the method, path, matched route, status code, environment, and query parameter names. They intentionally do not include request bodies, cookies, authorization headers, or query parameter values.
+
 ## Resource allocation guide for Docker Desktop on Windows
 
 For a small personal lab:
