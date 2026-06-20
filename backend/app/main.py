@@ -8,7 +8,10 @@ from .config import settings
 from .database import Base, engine, get_db
 from .gemini_client import ask_gemini
 from .models import Todo, User
+from .observability import init_sentry, observe_backend_request
 from .schemas import ChatRequest, TodoCreate, TodoOut, TodoUpdate, UserOut
+
+init_sentry()
 
 Base.metadata.create_all(bind=engine)
 
@@ -31,6 +34,11 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+
+
+@app.middleware("http")
+async def bogus_request_observer(request: Request, call_next):
+    return await observe_backend_request(request, call_next)
 
 
 @app.get("/health")
