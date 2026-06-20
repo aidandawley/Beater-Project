@@ -37,14 +37,6 @@ Then open:
    - `GOOGLE_CLIENT_ID=...`
    - `GOOGLE_CLIENT_SECRET=...`
 
-## Google sign-in troubleshooting
-
-If sign-in returns a Google `400 redirect_uri_mismatch`, make sure the OAuth client has this exact redirect URI, including `http` and port:
-
-- `http://localhost:8000/auth/google/callback`
-
-Also make sure `BACKEND_URL=http://localhost:8000` has no different hostname, trailing path, or HTTPS scheme while running the local Docker setup. The backend builds the Google authorization and token-exchange redirect URI from `BACKEND_URL`.
-
 ## Gemini setup
 
 1. Create a Gemini API key in Google AI Studio.
